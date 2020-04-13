@@ -6,7 +6,7 @@ output:
 ---
 
 
-## author: Victoria Khan
+## author: Victoria Khan 
 ## Loading and preprocessing the data
 
 ```r
@@ -54,6 +54,12 @@ scale_x_date(limits = c(as.Date("2012-10-01"), as.Date("2012-12-03")), date_labe
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+```r
+ggplot(Steps_per_day, aes(Total_steps)) + geom_histogram(binwidth = 2000, show.legend = F, fill="dark green")      
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-3-2.png)<!-- -->
 
 ## What is the average daily activity pattern?
 
@@ -112,12 +118,19 @@ scale_x_date(limits = c(as.Date("2012-10-01"), as.Date("2012-12-03")), date_labe
 ![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 ```r
- mean(Steps_per_day_nona$Total_steps) == median(Steps_per_day_nona$Total_steps)
+  mean(Steps_per_day_nona$Total_steps) == median(Steps_per_day_nona$Total_steps)
 ```
 
 ```
 ## [1] TRUE
 ```
+
+```r
+  ggplot(Steps_per_day_nona, aes(Total_steps)) + geom_histogram(binwidth = 2000, show.legend = F, fill="dark green")     
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-2.png)<!-- -->
+
 ## Are there differences in activity patterns between weekdays and weekends?
 
 ```r

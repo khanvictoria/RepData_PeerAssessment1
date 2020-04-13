@@ -10,7 +10,7 @@ library(readr)
 library(dplyr)
 library(ggplot2)
 ```
-## author: Victoria Khan
+## author: Victoria Khan 
 ## Loading and preprocessing the data
 ```{r}
 activity <- read_csv("activity/activity.csv")
@@ -24,6 +24,8 @@ activity %>% group_by(date) %>% summarise(Total_steps = sum(steps, na.rm=T)) -> 
           axis.title.y = element_blank(), plot.title = element_text(hjust= 0.5, size = 15)) + ggtitle("Total steps per day") + geom_hline(yintercept = mean(Steps_per_day$Total_steps), size=0.7, col="red") +
       geom_hline(yintercept =  median(Steps_per_day$Total_steps), size=0.7, col="blue") + scale_y_continuous(breaks = c(0, 5000, round(mean(Steps_per_day$Total_steps), 0),  round(median(Steps_per_day$Total_steps), 0), 15000, 20000)) + geom_text(x=as.Date("2012-12-02"),y= mean(Steps_per_day$Total_steps)-600, label="Mean", col="red") + geom_text(x=as.Date("2012-12-02"),y= median(Steps_per_day$Total_steps)+700, label="Median", col="blue")  +
 scale_x_date(limits = c(as.Date("2012-10-01"), as.Date("2012-12-03")), date_labels = "%Y-%m-%d")
+      
+ggplot(Steps_per_day, aes(Total_steps)) + geom_histogram(binwidth = 2000, show.legend = F, fill="dark green")      
 ```
 
 ## What is the average daily activity pattern?
@@ -34,6 +36,7 @@ max(average_interval_data$average_interval)
   ggplot(average_interval_data, aes(as.factor(interval), average_interval, fill=ifelse(average_interval==max(average_interval), "Max", "Other"))) +     geom_bar(stat = "identity", col="dark green", width=1, show.legend = F) + scale_fill_manual(values = c(Max = "red", Other="dark green")) +             geom_text(x= 104, y = max(average_interval_data$average_interval)+10, label="Max: Interval 835 with 206 steps", col="red") + theme(axis.text.x = element_blank(), axis.title.y = element_blank(), plot.title = element_text(size=15, hjust=0.5)) + xlab("5-minute intervals (a sequence of 288 intervals recorded within 1 day)") + ggtitle("Average number of steps in every interval averaged across all days") + ylim(0, 220)
   
   average_interval_data[which(average_interval_data$average_interval==max(average_interval_data$average_interval)),]
+   
 ```
 
 ## Imputing missing values (substitute NAs with the median for every interval)
@@ -49,8 +52,11 @@ activity_nona %>% group_by(date) %>% summarise(Total_steps = sum(steps)) -> Step
       geom_hline(yintercept =  median(Steps_per_day_nona$Total_steps), size=0.7, col="blue") + scale_y_continuous(breaks = c(0, 5000, round(mean(Steps_per_day_nona$Total_steps), 0),  round(median(Steps_per_day_nona$Total_steps), 0), 15000, 20000)) + geom_text(x=as.Date("2012-12-02"),y= mean(Steps_per_day_nona$Total_steps)-600, label="Mean", col="red") + geom_text(x=as.Date("2012-12-02"),y= median(Steps_per_day_nona$Total_steps)+700, label="Median", col="blue")  +
 scale_x_date(limits = c(as.Date("2012-10-01"), as.Date("2012-12-03")), date_labels = "%Y-%m-%d")
  
- mean(Steps_per_day_nona$Total_steps) == median(Steps_per_day_nona$Total_steps)
+  mean(Steps_per_day_nona$Total_steps) == median(Steps_per_day_nona$Total_steps)
+  
+  ggplot(Steps_per_day_nona, aes(Total_steps)) + geom_histogram(binwidth = 2000, show.legend = F, fill="dark green")     
 ```
+
 ## Are there differences in activity patterns between weekdays and weekends?
 ```{r}
 activity_nona$Weekend = ifelse(weekdays(activity_nona$date) %in% c("Saturday", "Sunday"), "Weekend", "Weekday")
